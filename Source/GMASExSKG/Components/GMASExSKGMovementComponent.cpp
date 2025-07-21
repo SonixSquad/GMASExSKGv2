@@ -96,6 +96,7 @@ void UGMASExSKGMovementComponent::MovementUpdate_Implementation(float DeltaSecon
 
 	if (bShouldRespawn && bRespawnReady)
 	{
+		UE_LOG(LogActor, Warning, TEXT("MovementUpdate: Executing respawn to location: %s"), *RespawnTargetLocation.ToString());
 		bWantsRespawn = false;
 		bShouldRespawn = false;
 		bRespawnReady = false;
@@ -109,6 +110,7 @@ void UGMASExSKGMovementComponent::MovementUpdate_Implementation(float DeltaSecon
 	}
 	else if (bWantsRespawn && !bShouldRespawn && GetOwnerRole() == ROLE_Authority)
 	{
+		UE_LOG(LogActor, Warning, TEXT("MovementUpdate: Initiating respawn from client request"));
 		// A respawn has been requested by the client; we should handle it.
 		Respawn_Internal();
 	}
@@ -186,13 +188,18 @@ void UGMASExSKGMovementComponent::GetRespawnLocation_Implementation(FTransform& 
 	
 	// Basic default; grab a random APlayerStart.
 	UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), Actors);
+	
+	UE_LOG(LogActor, Warning, TEXT("GetRespawnLocation found %d PlayerStart actors"), Actors.Num());
+	
 	if (Actors.Num() == 0)
 	{
 		OutTransform = GetActorTransform_GMC();
+		UE_LOG(LogActor, Warning, TEXT("No PlayerStart found, using current transform: %s"), *OutTransform.ToString());
 		return;
 	}
 
 	int ActorToUse = FMath::RandRange(0, Actors.Num() - 1);
 	const AActor *Actor = Actors[ActorToUse];
 	OutTransform = Actor->GetActorTransform();
+	UE_LOG(LogActor, Warning, TEXT("Selected PlayerStart %s at location: %s"), *Actor->GetName(), *OutTransform.ToString());
 }

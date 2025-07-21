@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GMASExSKGMovementComponent.h"
+
 #include "GMASExSKGPawn_Base.h"
 #include "GMCE_MotionWarpingComponent.h"
 #include "GMCE_MotionWarpSubject.h"

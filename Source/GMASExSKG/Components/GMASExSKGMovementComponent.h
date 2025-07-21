@@ -6,9 +6,8 @@
 #include "GMCE_OrganicMovementCmp.h"
 #include "GameFramework/PlayerStart.h"
 #include "UObject/Object.h"
+#include "TOTW_v7/Components/TOTW_CustomMovement.h"
 #include "GMASExSKGMovementComponent.generated.h"
-
-DECLARE_DYNAMIC_DELEGATE(FOnRespawn);
  
 /**
  * 
