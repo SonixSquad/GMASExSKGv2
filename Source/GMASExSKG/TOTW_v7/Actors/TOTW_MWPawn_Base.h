@@ -88,5 +88,24 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Respawn")
 	FGameplayTagContainer RespawnRemovesActiveTags;
+
+	// Replicated character mesh for proper network synchronization
+	UPROPERTY(ReplicatedUsing = OnRep_CharacterMesh, BlueprintReadOnly, Category = "Character")
+	TSoftObjectPtr<USkeletalMesh> ReplicatedCharacterMesh;
+
+	UFUNCTION()
+	void OnRep_CharacterMesh();
+
+	// Replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
+	// Simple function to set mesh - works from any context
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetMesh(USkeletalMesh* NewMesh);
+
+	// Function to set mesh from data asset - for use during spawn
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetMeshFromDataAsset(UCharSetup_DataAsset* DataAsset);
 };
 

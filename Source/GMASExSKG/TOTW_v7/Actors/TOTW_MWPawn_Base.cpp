@@ -4,6 +4,8 @@
 #include "TOTW_MWPawn_Base.h"
 
 #include "Camera/CameraComponent.h"
+#include "TOTW_v7/Data/CharSetup_DataAsset.h"
+#include "Net/UnrealNetwork.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
@@ -239,5 +241,75 @@ FAnimMontageInstance* ATOTW_MWPawn_Base::GetRootMotionAnimMontageInstance(
 UGMCE_OrganicMovementCmp* ATOTW_MWPawn_Base::GetGMCExMovementComponent() const
 {
 	return MovementComponent;
+}
+
+void ATOTW_MWPawn_Base::OnRep_CharacterMesh()
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnRep_CharacterMesh called, ReplicatedCharacterMesh valid: %s, SKMesh valid: %s"), 
+		ReplicatedCharacterMesh.IsValid() ? TEXT("True") : TEXT("False"),
+		SKMesh ? TEXT("True") : TEXT("False"));
+	
+	if (ReplicatedCharacterMesh.IsValid())
+	{
+		USkeletalMesh* LoadedMesh = ReplicatedCharacterMesh.LoadSynchronous();
+		if (LoadedMesh && SKMesh)
+		{
+			SKMesh->SetSkeletalMesh(LoadedMesh);
+			UE_LOG(LogTemp, Log, TEXT("Replicated mesh applied: %s"), *LoadedMesh->GetName());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Failed to load mesh (%s) or SKMesh is null"), 
+				LoadedMesh ? TEXT("Mesh loaded") : TEXT("Mesh failed to load"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ReplicatedCharacterMesh is not valid"));
+	}
+}
+
+void ATOTW_MWPawn_Base::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ATOTW_MWPawn_Base, ReplicatedCharacterMesh);
+}
+
+void ATOTW_MWPawn_Base::SetMesh(USkeletalMesh* NewMesh)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SetMesh called with mesh: %s"), NewMesh ? *NewMesh->GetName() : TEXT("NULL"));
+	
+	if (NewMesh && SKMesh)
+	{
+		SKMesh->SetSkeletalMesh(NewMesh);
+		UE_LOG(LogTemp, Log, TEXT("Mesh applied: %s"), *NewMesh->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to set mesh - NewMesh: %s, SKMesh: %s"), 
+			NewMesh ? TEXT("Valid") : TEXT("NULL"),
+			SKMesh ? TEXT("Valid") : TEXT("NULL"));
+	}
+}
+
+void ATOTW_MWPawn_Base::SetMeshFromDataAsset(UCharSetup_DataAsset* DataAsset)
+{
+	// Only allow mesh setting on server or in standalone
+	if (!HasAuthority() && GetNetMode() != NM_Standalone)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetMeshFromDataAsset called without authority - ignoring"));
+		return;
+	}
+
+	if (DataAsset)
+	{
+		DataAsset->ApplySkeletalMesh(this);
+		UE_LOG(LogTemp, Log, TEXT("Applied mesh from data asset: %s"), *DataAsset->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Data asset is null"));
+	}
 }
 

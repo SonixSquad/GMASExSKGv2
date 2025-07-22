@@ -140,26 +140,30 @@ void UCharSetup_DataAsset::ApplySkeletalMesh(ATOTW_MWPawn_Base* TargetPawn) cons
 		return;
 	}
 
-	USkeletalMeshComponent* MeshComponent = TargetPawn->GetComponentByClass<USkeletalMeshComponent>();
-	if (!MeshComponent)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ApplySkeletalMesh: No skeletal mesh component found on pawn"));
-		return;
-	}
-
-	// Load and apply skeletal mesh
+	// Load and apply skeletal mesh directly
 	if (!CharacterMesh.IsNull())
 	{
-		USkeletalMesh* LoadedMesh = CharacterMesh.LoadSynchronous();
+		// Check if already loaded
+		USkeletalMesh* LoadedMesh = CharacterMesh.Get();
+		if (!LoadedMesh)
+		{
+			// Load synchronously if not already loaded
+			LoadedMesh = CharacterMesh.LoadSynchronous();
+		}
+		
 		if (LoadedMesh)
 		{
-			MeshComponent->SetSkeletalMesh(LoadedMesh);
+			TargetPawn->SetMesh(LoadedMesh);
 			UE_LOG(LogTemp, Log, TEXT("Applied skeletal mesh: %s"), *LoadedMesh->GetName());
 		}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Failed to load skeletal mesh: %s"), *CharacterMesh.ToString());
 		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character mesh is null in data asset"));
 	}
 }
 
