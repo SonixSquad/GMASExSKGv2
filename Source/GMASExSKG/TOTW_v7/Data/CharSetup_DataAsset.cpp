@@ -153,8 +153,17 @@ void UCharSetup_DataAsset::ApplySkeletalMesh(ATOTW_MWPawn_Base* TargetPawn) cons
 		
 		if (LoadedMesh)
 		{
-			TargetPawn->SetMesh(LoadedMesh);
-			UE_LOG(LogTemp, Log, TEXT("Applied skeletal mesh: %s"), *LoadedMesh->GetName());
+			// Get the skeletal mesh component and set the mesh directly
+			USkeletalMeshComponent* MeshComponent = TargetPawn->GetComponentByClass<USkeletalMeshComponent>();
+			if (MeshComponent)
+			{
+				MeshComponent->SetSkeletalMesh(LoadedMesh);
+				UE_LOG(LogTemp, Log, TEXT("Applied skeletal mesh: %s"), *LoadedMesh->GetName());
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("No skeletal mesh component found on pawn"));
+			}
 		}
 		else
 		{

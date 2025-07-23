@@ -19,7 +19,9 @@ public class GMASExSKG : ModuleRules
 			ModuleDirectory,
 			Path.Combine(ModuleDirectory, "Actors"), 
 			Path.Combine(ModuleDirectory, "Animation"), 
-			Path.Combine(ModuleDirectory, "Components")
+			Path.Combine(ModuleDirectory, "Components"),
+			Path.Combine(ModuleDirectory, "TOTW_v7/Abilities"),
+			Path.Combine(ModuleDirectory, "TOTW_v7/Systems")
 		});
 
 	}

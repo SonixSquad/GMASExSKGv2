@@ -99,13 +99,5 @@ protected:
 	// Replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-public:
-	// Simple function to set mesh - works from any context
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	void SetMesh(USkeletalMesh* NewMesh);
-
-	// Function to set mesh from data asset - for use during spawn
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	void SetMeshFromDataAsset(UCharSetup_DataAsset* DataAsset);
 };
 
