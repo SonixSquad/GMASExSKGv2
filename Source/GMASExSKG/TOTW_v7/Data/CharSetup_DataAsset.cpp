@@ -53,38 +53,7 @@ EDataValidationResult UCharSetup_DataAsset::IsDataValid(TArray<FText>& Validatio
 		}
 	}
 
-	// TODO: Validate additional components when they are added back to the struct
-	// for (int32 i = 0; i < ComponentSetup.AdditionalComponents.Num(); i++)
-	// {
-	// 	if (ComponentSetup.AdditionalComponents[i] == nullptr)
-	// 	{
-	// 		ValidationErrors.Add(FText::FromString(FString::Printf(TEXT("Additional Component at index %d is null"), i)));
-	// 		Result = EDataValidationResult::Invalid;
-	// 	}
-	// }
-/**
-	// Validate camera settings
-	if (CameraSetup.FirstPersonCameraFOV < 30.0f || CameraSetup.FirstPersonCameraFOV > 120.0f)
-	{
-		ValidationErrors.Add(FText::FromString(FString::Printf(TEXT("First Person Camera FOV (%f) is out of valid range (30-120)"), CameraSetup.FirstPersonCameraFOV)));
-		Result = EDataValidationResult::Invalid;
-	}
 
-	if (CameraSetup.ThirdPersonArmLength < 100.0f || CameraSetup.ThirdPersonArmLength > 1000.0f)
-	{
-		ValidationErrors.Add(FText::FromString(FString::Printf(TEXT("Third Person Arm Length (%f) is out of valid range (100-1000)"), CameraSetup.ThirdPersonArmLength)));
-		Result = EDataValidationResult::Invalid;
-	}
-
-	// Validate first person camera socket name is set if using first person mode
-	if ((CameraSetup.CameraMode == ECameraMode::FirstPerson || CameraSetup.CameraMode == ECameraMode::Both) &&
-		CameraSetup.bAutoAttachFirstPersonCamera &&
-		CameraSetup.FirstPersonCameraSocketName.IsNone())
-	{
-		ValidationErrors.Add(FText::FromString(TEXT("First Person Camera Socket Name must be set when using First Person camera mode with auto-attach enabled")));
-		Result = EDataValidationResult::Invalid;
-	}
-**/
 	// Validate input mapping contexts
 	for (int32 i = 0; i < InputMappingContexts.Num(); i++)
 	{

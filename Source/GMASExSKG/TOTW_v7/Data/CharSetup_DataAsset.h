@@ -12,23 +12,14 @@ class UAnimBlueprint;
 class UInputMappingContext;
 class UTOTW_CustomMovement;
 
-/**
-// Camera mode enum (duplicated to avoid circular dependency)
-UENUM(BlueprintType)
-enum class ECameraMode : uint8
-{
-	ThirdPerson		UMETA(DisplayName = "Third Person"),
-	FirstPerson		UMETA(DisplayName = "First Person"),
-	Both			UMETA(DisplayName = "Both Cameras")
-};
-**/
+
 
 UENUM(BlueprintType)
 enum class ECharacterFaction : uint8
 {
 	Neutral		UMETA(DisplayName = "Neutral"),
-	Militia		UMETA(DisplayName = "MILITIA"),
-	Saboteur	UMETA(DisplayName = "SABOT")
+	Faction_A		UMETA(DisplayName = "Faction_A"),
+	Faction_B	UMETA(DisplayName = "Faction_B")
 };
 
 USTRUCT(BlueprintType)
@@ -53,17 +44,7 @@ struct FCharacterAbilitySetup
 		bAutoActivate = false;
 	}
 };
-/**
-UENUM(BlueprintType)
-enum class EShootingType : uint8
-{
-	None			UMETA(DisplayName = "None"),
-	Ballistic		UMETA(DisplayName = "Ballistic Weapons"),
-	Energy			UMETA(DisplayName = "Energy Weapons"),
-	Projectile		UMETA(DisplayName = "Projectile Weapons"),
-	Hybrid			UMETA(DisplayName = "Hybrid Weapons")
-};
-**/
+
 USTRUCT(BlueprintType)
 struct FCharacterComponentSetup
 {
@@ -75,67 +56,14 @@ struct FCharacterComponentSetup
 
 	// TODO: Add additional component setup properties as needed
 	// int32 AdditionalComponents;
-	/**
-	//Type of shooting system this character uses (affects VFX and behavior)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting")
-	EShootingType ShootingType = EShootingType::None;
 
-	// Blueprint class for the shooting component (if different from default)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta=(EditCondition="ShootingType != EShootingType::None"))
-	TSubclassOf<UActorComponent> ShootingComponentClass;
-	
-	// Blueprint class for the climbing component (if different from default)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Climbing")
-	TSubclassOf<UActorComponent> ClimbingComponentClass;
-
-	// Custom component classes to add (optional)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	TArray<TSubclassOf<UActorComponent>> AdditionalComponents;
-
-	FCharacterComponentSetup()
-	{
-		MovementComponentClass = nullptr; // Will default to basic component
-		ShootingType = EShootingType::None;
-		ShootingComponentClass = nullptr;
-		ClimbingComponentClass = nullptr;
-	}
-**/
 };
 
 USTRUCT(BlueprintType)
 struct FCharacterCameraSetup
 {
 	GENERATED_BODY()
-/**
-	// Camera mode for this character 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	ECameraMode CameraMode = ECameraMode::ThirdPerson;
 
-	// Socket name for first-person camera attachment
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	FName FirstPersonCameraSocketName = TEXT("S_Camera");
-
-	// Whether to auto-attach first-person camera to socket
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-	bool bAutoAttachFirstPersonCamera = true;
-
-	// Field of view for first-person camera
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (ClampMin = 30.0f, ClampMax = 120.0f))
-	float FirstPersonCameraFOV = 90.0f;
-
-	// Third-person camera arm length
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (ClampMin = 100.0f, ClampMax = 1000.0f))
-	float ThirdPersonArmLength = 400.0f;
-
-	FCharacterCameraSetup()
-	{
-		CameraMode = ECameraMode::ThirdPerson;
-		FirstPersonCameraSocketName = TEXT("S_Camera");
-		bAutoAttachFirstPersonCamera = true;
-		FirstPersonCameraFOV = 90.0f;
-		ThirdPersonArmLength = 400.0f;
-	}
-**/
 };
 
 USTRUCT(BlueprintType)
